@@ -1,5 +1,9 @@
 <?php
 
+namespace omcrn\unitedlogs;
+
+use Exception;
+
 /**
  * Created by PhpStorm.
  * User: guga
@@ -8,6 +12,9 @@
  */
 class Log
 {
+
+    const DOMAIN_KEY_IN_ENV = 'UNITED_LOGS_DOMAIN';
+
     private $key;
     private $environment;
     private $domain;
@@ -22,17 +29,20 @@ class Log
      * @param $domain string|null
      * @throws Exception
      */
-    public function __construct($key, $environment, $domain=null)
+    public function __construct($key, $environment, $domain = null)
     {
-        if(!$key){
+        if (!$key) {
             throw new Exception('API Key not specified');
         }
-        if(!$environment){
+        if (!$environment) {
             throw new Exception('Environment not specified');
         }
         $this->key = $key;
         $this->environment = $environment;
-        $this->domain = $domain ? ($domain . '/api/v1/log') : 'http://unilogs.dev/api/v1/log';
+        if ($domain === null && !isset($_ENV[self::DOMAIN_KEY_IN_ENV])){
+            throw new Exception('Please put the domain in global environment variable with key "'.self::DOMAIN_KEY_IN_ENV.'" or specify it when constructing '.static::class.' object.');
+        }
+        $this->domain = $domain ? ($domain . '/api/v1/log') : $_ENV[self::DOMAIN_KEY_IN_ENV].'/api/v1/log';
     }
 
 
@@ -43,7 +53,7 @@ class Log
      */
     public function error($message, $category, $params = null)
     {
-        $this->sendLog($this->domain .'/error',$message,$category,$params);
+        $this->sendLog($this->domain . '/error', $message, $category, $params);
     }
 
     /**
@@ -53,7 +63,7 @@ class Log
      */
     public function success($message, $category, $params = null)
     {
-        $this->sendLog($this->domain .'/success',$message,$category,$params);
+        $this->sendLog($this->domain . '/success', $message, $category, $params);
     }
 
 
@@ -64,9 +74,8 @@ class Log
      */
     public function info($message, $category, $params = null)
     {
-        $this->sendLog($this->domain .'/info',$message,$category,$params);
+        $this->sendLog($this->domain . '/info', $message, $category, $params);
     }
-
 
 
     /**
@@ -76,9 +85,8 @@ class Log
      */
     public function warning($message, $category, $params = null)
     {
-        $this->sendLog($this->domain .'/warning',$message,$category,$params);
+        $this->sendLog($this->domain . '/warning', $message, $category, $params);
     }
-
 
 
     /**
@@ -87,7 +95,7 @@ class Log
      * @param $category
      * @param $params
      */
-    private function sendLog($url,$message,$category,$params)
+    private function sendLog($url, $message, $category, $params)
     {
         $data = array(
             'api' => $this->key,
@@ -99,12 +107,12 @@ class Log
 
         $options = array(
             'http' => array(
-                'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-                'method'  => 'POST',
+                'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+                'method' => 'POST',
                 'content' => http_build_query($data)
             )
         );
-        $context  = stream_context_create($options);
+        $context = stream_context_create($options);
         $result = file_get_contents($url, false, $context);
         if ($result === FALSE) {
             /* Handle error */
