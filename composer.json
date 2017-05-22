@@ -1,5 +1,5 @@
 {
-    "name": "omcrn/united-logs-php-sdk",
+    "name": "omcrn/united-logs-sdk",
     "description": "Php client for united-logs for easy implementation",
     "type": "library",
     "license": "MIT",
