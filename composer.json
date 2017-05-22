@@ -1,12 +1,16 @@
 {
-    "name": "omcrn/united-logs-client",
+    "name": "omcrn/united-logs-php-sdk",
     "description": "Php client for united-logs for easy implementation",
     "type": "library",
     "license": "MIT",
     "authors": [
         {
-            "name": "guga",
+            "name": "Guga Grigolia",
             "email": "grigolia.guga@gmail.com"
+        },
+        {
+            "name": "Zura Sekhniashvili",
+            "email": "zurasekhniashvili@gmail.com"
         }
     ],
     "require": {}
