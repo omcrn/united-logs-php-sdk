@@ -1,0 +1,13 @@
+{
+    "name": "omcrn/united-logs-client",
+    "description": "Php client for united-logs for easy implementation",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "guga",
+            "email": "grigolia.guga@gmail.com"
+        }
+    ],
+    "require": {}
+}
