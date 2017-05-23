@@ -13,7 +13,9 @@
       "email": "zurasekhniashvili@gmail.com"
     }
   ],
-  "require": {},
+  "require": {
+    "php-curl": "*"
+  },
   "autoload": {
     "psr-4": {
       "omcrn\\unitedlogs\\": ""
